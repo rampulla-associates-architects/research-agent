@@ -1,13 +1,13 @@
 :global(.search-box-shell) {
-  border: 1px solid #9ea8b5;
+  border: 1px solid var(--color-border-control);
   border-radius: 6px;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 1px rgba(31, 41, 51, 0.03);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 3%, transparent);
   overflow: hidden;
 }
 
 :global(.search-box-shell:focus-within) {
-  border-color: #2f6fed;
+  border-color: var(--color-accent);
   box-shadow: var(--focus-glow);
 }
 
@@ -21,7 +21,7 @@
   padding: 9px 12px;
   border: 0;
   background: transparent;
-  color: #1f2933;
+  color: var(--color-text);
   font: inherit;
   font-size: 14px;
   box-sizing: border-box;
@@ -29,12 +29,12 @@
 }
 
 :global(.search-widget-input::placeholder) {
-  color: #a0aab4;
+  color: var(--color-text-subtle);
 }
 
 :global(.search-widget-results) {
-  border-top: 1px solid #d6d9de;
-  background: #ffffff;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 :global(.search-widget-result) {
@@ -44,10 +44,10 @@
   gap: 10px;
   width: 100%;
   border: 0;
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid var(--color-border-muted);
   background: transparent;
   padding: 8px 12px;
-  color: #1f2933;
+  color: var(--color-text);
   cursor: pointer;
   text-align: left;
   font: inherit;
@@ -59,7 +59,7 @@
 }
 
 :global(.search-widget-result:hover) {
-  background: #f0f4f8;
+  background: var(--color-surface-hover);
 }
 
 :global(.search-widget-result > span:first-child) {
@@ -76,16 +76,16 @@
 }
 
 :global(.search-widget-result span:not(.search-widget-result-action)) {
-  color: #526070;
+  color: var(--color-text-muted);
 }
 
 :global(.search-widget-result-action) {
-  color: #2f52a0;
+  color: var(--color-accent-strong);
   font-weight: 700;
 }
 
 :global(.search-widget-result.is-added .search-widget-result-action) {
-  color: #2a9a5e;
+  color: var(--color-success);
 }
 
 :global(.search-widget-result-status) {
@@ -97,7 +97,7 @@
 }
 
 :global(.search-widget-result-empty) {
-  color: #526070;
+  color: var(--color-text-muted);
 }
 
 :global(.search-widget-result-empty:hover) {
@@ -105,21 +105,21 @@
 }
 
 :global(.search-widget-result-warning) {
-  color: #7a5400;
-  background: #fff8db;
+  color: var(--color-warning-strong);
+  background: var(--color-surface-warning);
 }
 
 :global(.search-widget-result-warning:hover) {
-  background: #fff8db;
+  background: var(--color-surface-warning);
 }
 
 :global(.search-widget-result-error) {
-  color: #8a1f1f;
-  background: #fff5f5;
+  color: var(--color-danger-strong);
+  background: var(--color-surface-danger);
 }
 
 :global(.search-widget-result-error:hover) {
-  background: #fff5f5;
+  background: var(--color-surface-danger);
 }
 
 :global(.search-source-ctrl) {
@@ -128,7 +128,7 @@
 }
 
 :global(.search-source-empty) {
-  color: #8a95a3;
+  color: var(--color-text-subtle);
 }
 
 :global(.search-source-menu) {
@@ -137,10 +137,10 @@
   right: 0;
   width: max-content;
   max-width: calc(100vw - 24px);
-  background: #ffffff;
-  border: 1px solid #d6d9de;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-popover);
   z-index: 100;
   overflow: hidden;
 }
@@ -153,7 +153,7 @@
   padding: 7px 12px;
   border: 0;
   background: transparent;
-  color: #1f2933;
+  color: var(--color-text);
   font-size: 12px;
   cursor: pointer;
   text-align: left;
@@ -165,22 +165,22 @@
   text-overflow: ellipsis;
 }
 
-:global(.search-source-item:hover) { background: #f0f4f8; }
-:global(.search-source-item.is-active) { color: #2f6fed; font-weight: 600; }
-:global(.search-source-item:disabled) { color: #8a95a3; cursor: not-allowed; }
+:global(.search-source-item:hover) { background: var(--color-surface-hover); }
+:global(.search-source-item.is-active) { color: var(--color-accent); font-weight: 600; }
+:global(.search-source-item:disabled) { color: var(--color-text-subtle); cursor: not-allowed; }
 :global(.search-source-item:disabled:hover) { background: transparent; }
-:global(.search-source-item--edit) { color: #526070; }
-:global(.search-source-item--edit:hover) { color: #1f2933; }
+:global(.search-source-item--edit) { color: var(--color-text-muted); }
+:global(.search-source-item--edit:hover) { color: var(--color-text); }
 
 :global(.search-source-divider) {
   height: 1px;
-  background: #e8eaed;
+  background: var(--color-border-muted);
   margin: 4px 0;
 }
 
 :global(mapbox-search-box) {
   display: block;
-  color: #1f2933;
+  color: var(--color-text);
   font: inherit;
   margin: -1px;
 }

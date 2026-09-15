@@ -8,6 +8,7 @@ import { SidebarPanelItem } from "./SidebarPanelItem";
 type SidebarPanelProps = {
   activeFeature: FeatureName;
   featureOrder: FeatureName[];
+  onOpenAddressOnMap?: (address: unknown) => void;
   onOpenPage?: (id: string, label: string, value: unknown, options?: unknown) => void;
   onOpenSettings?: () => void;
   onInvalidateWorkspaceData?: (featureId: FeatureName, scopes: WorkspaceInvalidationScope | WorkspaceInvalidationScope[]) => void;
@@ -15,7 +16,7 @@ type SidebarPanelProps = {
   workspaceInvalidation?: WorkspaceInvalidationState;
 };
 
-export const SidebarPanel = ({ activeFeature, featureOrder, onOpenPage, onOpenSettings, onInvalidateWorkspaceData, onSelectAgentSession, workspaceInvalidation = {} }: SidebarPanelProps) => {
+export const SidebarPanel = ({ activeFeature, featureOrder, onOpenAddressOnMap, onOpenPage, onOpenSettings, onInvalidateWorkspaceData, onSelectAgentSession, workspaceInvalidation = {} }: SidebarPanelProps) => {
   useEffect(() => {
     if (activeFeature === "settings") onOpenSettings?.();
   }, [activeFeature, onOpenSettings]);
@@ -43,6 +44,7 @@ export const SidebarPanel = ({ activeFeature, featureOrder, onOpenPage, onOpenSe
           key={featureId}
           active={activeFeature === featureId}
           featureId={featureId}
+          onOpenAddressOnMap={onOpenAddressOnMap}
           onOpenPage={onOpenPage}
           onInvalidateWorkspaceData={onInvalidateWorkspaceData}
           onSelectAgentSession={onSelectAgentSession}

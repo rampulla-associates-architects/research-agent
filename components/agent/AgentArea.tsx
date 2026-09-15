@@ -320,8 +320,6 @@ export function createAgentController() {
     setCatalogEventHandler: (handler: AgentRuntimeBridge["catalogEventHandler"]) => {
       agentRuntimeBridge.catalogEventHandler = typeof handler === "function" ? handler : null;
     },
-    setReportController: () => {},
-    setReportOpener: () => {},
     setRecordController: (controller: AgentRuntimeBridge["recordController"]) => {
       agentRuntimeBridge.recordController = controller || null;
     },

@@ -1,4 +1,5 @@
 @import url("@xyflow/react/dist/style.css");
+@import url("maplibre-gl/dist/maplibre-gl.css");
 @import url("./layout.css");
 @import url("../features/address/address.css");
 @import url("../features/dataset/dataset.css");
@@ -7,14 +8,108 @@
 @import url("../features/record/record.css");
 
 :root {
+  color-scheme: light dark;
+
+  --color-app-bg: #f3f4f6;
+  --color-workspace-bg: #d8dde5;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f7f8fa;
+  --color-surface-muted: #eef0f4;
+  --color-surface-hover: #f0f4f8;
+  --color-surface-hover-strong: #e2e5ea;
+  --color-surface-selected: #eef4ff;
+  --color-surface-raised: #fcfdfe;
+  --color-surface-warning: #fff8db;
+  --color-surface-danger: #fff5f5;
+  --color-surface-success: #f3fbf6;
+  --color-dirty-bg: #fffbe8;
+
+  --color-text: #1f2933;
+  --color-text-muted: #526070;
+  --color-text-subtle: #8a95a3;
+  --color-text-inverse: #ffffff;
+  --color-object-key: #174ea6;
+  --color-list-key: #5b21b6;
+
+  --color-border: #d6d9de;
+  --color-border-muted: #e5e8ec;
+  --color-border-strong: #c9ced6;
+  --color-border-control: #9ea8b5;
+  --color-border-hover: #aeb6c2;
+
+  --color-accent: #2f6fed;
+  --color-accent-strong: #2f52a0;
+  --color-success: #2a9a5e;
+  --color-success-strong: #137333;
+  --color-warning: #b7791f;
+  --color-warning-strong: #7a5400;
+  --color-danger: #b3261e;
+  --color-danger-strong: #721c24;
+  --color-money: #d4a000;
+  --color-dirty-border: #e0c15a;
+  --color-primary-bg: #1f2933;
+  --color-primary-bg-hover: #344052;
+  --color-primary-text: #ffffff;
+
+  --shadow-popover: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 2px 8px rgba(31, 41, 51, 0.08);
   --focus-glow: 0 0 0 2px rgba(47, 111, 237, 0.24), 0 0 14px rgba(47, 111, 237, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-app-bg: #0f141b;
+    --color-workspace-bg: #151b24;
+    --color-surface: #151b24;
+    --color-surface-alt: #1b2330;
+    --color-surface-muted: #202938;
+    --color-surface-hover: #263244;
+    --color-surface-hover-strong: #2b3545;
+    --color-surface-selected: #1d3152;
+    --color-surface-raised: #18202b;
+    --color-surface-warning: #3a2d10;
+    --color-surface-danger: #3b1d22;
+    --color-surface-success: #173324;
+    --color-dirty-bg: #332b12;
+
+    --color-text: #e6edf5;
+    --color-text-muted: #a7b2bf;
+    --color-text-subtle: #7d8998;
+    --color-text-inverse: #0f141b;
+    --color-object-key: #7daaff;
+    --color-list-key: #c29cff;
+
+    --color-border: #334050;
+    --color-border-muted: #2a3442;
+    --color-border-strong: #445266;
+    --color-border-control: #5b6878;
+    --color-border-hover: #5b6a7e;
+
+    --color-accent: #7aa7ff;
+    --color-accent-strong: #a9c4ff;
+    --color-success: #75d49b;
+    --color-success-strong: #85e0a7;
+    --color-warning: #e2bd63;
+    --color-warning-strong: #f0cc73;
+    --color-danger: #ff8f8f;
+    --color-danger-strong: #ffb0b0;
+    --color-money: #e0bd45;
+    --color-dirty-border: #d8b94d;
+    --color-primary-bg: #e6edf5;
+    --color-primary-bg-hover: #c8d3df;
+    --color-primary-text: #0f141b;
+
+    --shadow-popover: 0 8px 22px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.28);
+    --focus-glow: 0 0 0 2px rgba(122, 167, 255, 0.28), 0 0 16px rgba(122, 167, 255, 0.22);
+  }
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: #f3f4f6;
-  color: #1f2933;
+  background: var(--color-app-bg);
+  color: var(--color-text);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -26,7 +121,7 @@ textarea {
 button:focus-visible,
 textarea:focus-visible,
 mapbox-search-box:focus-within {
-  outline: 2px solid #2f6fed;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -42,7 +137,7 @@ mapbox-search-box:focus-within {
   flex: 0 0 auto;
   width: 16px;
   height: 16px;
-  background: #d4a000;
+  background: var(--color-money);
   mask: center / contain no-repeat var(--asset-money);
   -webkit-mask: center / contain no-repeat var(--asset-money);
   pointer-events: none;

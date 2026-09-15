@@ -3,7 +3,7 @@ import "./globals.css";
 
 const assetNames = [
   "add", "close", "cloud", "code", "delete", "document", "edit", "graph", "link", "list", "menu", "money", "more",
-  "mount", "polygon", "revert", "save", "search", "sync", "table", "unmount", "wrap"
+  "mount", "polygon", "raw", "revert", "save", "search", "sync", "table", "unmount", "wrap"
 ];
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const assetVariables = assetNames.map((name) => `--asset-${name}:url("${basePath}/assets/${name}.svg");`).join("");
@@ -28,7 +28,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <style>{`:root{${assetVariables}}`}</style>
-        <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
       </head>
       <body>{children}</body>
     </html>

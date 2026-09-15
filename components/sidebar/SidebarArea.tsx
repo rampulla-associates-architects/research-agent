@@ -12,6 +12,7 @@ import { SidebarPanel } from "./SidebarPanel";
 
 type SidebarAreaProps = {
   onOpenFile?: (entry: unknown) => void;
+  onOpenAddressOnMap?: (address: unknown) => void;
   onOpenPage?: (id: string, label: string, value: unknown, options?: unknown) => void;
   onOpenSettings?: () => void;
   onInvalidateWorkspaceData?: (featureId: FeatureName, scopes: WorkspaceInvalidationScope | WorkspaceInvalidationScope[]) => void;
@@ -30,7 +31,7 @@ function moveFeature(featureOrder: FeatureName[], feature: FeatureName, targetFe
   return nextOrder;
 }
 
-export const SidebarArea = ({ onOpenPage, onOpenSettings, onInvalidateWorkspaceData, onSelectAgentSession, workspaceInvalidation = {} }: SidebarAreaProps = {}) => {
+export const SidebarArea = ({ onOpenAddressOnMap, onOpenPage, onOpenSettings, onInvalidateWorkspaceData, onSelectAgentSession, workspaceInvalidation = {} }: SidebarAreaProps = {}) => {
   const [{ activeFeature, featureOrder }, setWorkspaceFeatureState] = useState(DEFAULT_WORKSPACE_FEATURE_STATE);
   const canSaveWorkspaceFeatureStateRef = useRef(false);
   const setActiveFeature = (feature: FeatureName) => {
@@ -66,6 +67,7 @@ export const SidebarArea = ({ onOpenPage, onOpenSettings, onInvalidateWorkspaceD
           <SidebarPanel
             activeFeature={activeFeature}
             featureOrder={featureOrder}
+            onOpenAddressOnMap={onOpenAddressOnMap}
             onOpenPage={onOpenPage}
             onOpenSettings={onOpenSettings}
             onInvalidateWorkspaceData={onInvalidateWorkspaceData}

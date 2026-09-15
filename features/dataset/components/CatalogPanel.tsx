@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
+import { Fragment, useState } from "react";
 import { getDatasetSearchSources, saveDatasetSearchSources } from "../dataset.api";
-import { DomSlot } from "@/components/editor/DomSlot";
-import { EditorListView } from "@/components/editor/EditorListView";
 import { EditorActionsMenu } from "@/components/editor/EditorActionsMenu";
 import { arcgisCatalogProvider } from "./providers/arcgis";
 import { socrataCatalogProvider } from "./providers/socrata";
@@ -25,30 +24,29 @@ export function createCatalogController(editorTabController, agentController, ge
   const resultsPanel = document.createElement("div");
   resultsPanel.className = "search-catalog-results-panel";
 
-  const saveStatusEl = document.createElement("span");
-  saveStatusEl.className = "search-catalog-save-status";
-
-  const addCatalogButton = document.createElement("button");
-  addCatalogButton.className = "section-tool-button add-source-button";
-  addCatalogButton.type = "button";
-  addCatalogButton.setAttribute("aria-label", "Add catalog");
-  addCatalogButton.title = "Add catalog";
-  addCatalogButton.addEventListener("click", addCatalog);
+  let saveStatusEl: HTMLSpanElement | null = null;
 
   const pageMenu = document.createElement("div");
   createRoot(pageMenu).render(
-    <EditorActionsMenu leftNodes={[addCatalogButton, saveStatusEl]} />
+    <EditorActionsMenu
+      left={(
+        <Fragment>
+          <button className="section-tool-button add-source-button" type="button" aria-label="Add catalog" title="Add catalog" onClick={addCatalog} />
+          <span className="search-catalog-save-status" ref={(node) => { saveStatusEl = node; }} />
+        </Fragment>
+      )}
+    />
   );
 
   const catalogListEl = document.createElement("div");
   catalogListEl.className = "search-catalog-card-list";
 
   const pageListView = document.createElement("div");
-  createRoot(pageListView).render(
-    <EditorListView>
-      <DomSlot nodes={[catalogListEl]} />
-    </EditorListView>
-  );
+  pageListView.className = "page-view page-list-view";
+  const pageListContent = document.createElement("div");
+  pageListContent.className = "page-view-content page-list-view-content";
+  pageListContent.appendChild(catalogListEl);
+  pageListView.appendChild(pageListContent);
   resultsPanel.append(pageMenu, pageListView);
 
   // ── Catalog loading ────────────────────────────────────────────────────────────
@@ -67,8 +65,7 @@ export function createCatalogController(editorTabController, agentController, ge
 
   function queueCatalogSync() {
     liveSaveQueued = true;
-    saveStatusEl.textContent = "Saving...";
-    saveStatusEl.classList.remove("is-saved");
+    setCatalogSaveStatus("Saving...", false);
     clearTimeout(liveSaveTimer);
     liveSaveTimer = setTimeout(syncCatalogsNow, 350);
   }
@@ -88,16 +85,13 @@ export function createCatalogController(editorTabController, agentController, ge
 
       catalogs = serializedCatalogs;
       notifyCatalogsChanged();
-      saveStatusEl.textContent = "Saved";
-      saveStatusEl.classList.add("is-saved");
+      setCatalogSaveStatus("Saved", true);
       setTimeout(() => {
-        saveStatusEl.textContent = "";
-        saveStatusEl.classList.remove("is-saved");
+        setCatalogSaveStatus("", false);
       }, 2000);
     } catch (error) {
       console.error("[Catalog] Live sync failed", error);
-      saveStatusEl.textContent = "Save failed";
-      saveStatusEl.classList.remove("is-saved");
+      setCatalogSaveStatus("Save failed", false);
       liveSaveQueued = true;
     } finally {
       liveSaveInFlight = false;
@@ -106,6 +100,12 @@ export function createCatalogController(editorTabController, agentController, ge
         liveSaveTimer = setTimeout(syncCatalogsNow, 1000);
       }
     }
+  }
+
+  function setCatalogSaveStatus(text: string, saved: boolean) {
+    if (!saveStatusEl) return;
+    saveStatusEl.textContent = text;
+    saveStatusEl.classList.toggle("is-saved", saved);
   }
 
   function renderCatalogCards() {
@@ -334,7 +334,7 @@ function getCatalogTypeLabel(type) {
   // ── Dataset detail tabs ────────────────────────────────────────────────────
 
   function openDatasetTab(item) {
-    editorTabController.openSearchCatalogDatasetTab(item, buildSearchCatalogDatasetDetailPanel(item, onAddSource));
+    editorTabController.openSearchCatalogDatasetTab(item, <CatalogDatasetDetailPanel item={item} onAddSource={onAddSource} />);
   }
 
   // ── Agent thread helpers ───────────────────────────────────────────────────
@@ -375,75 +375,62 @@ function getCatalogTypeLabel(type) {
   return { open };
 }
 
-export function buildSearchCatalogDatasetDetailPanel(item, onAddSource) {
-  const panel = document.createElement("div");
-  panel.className = "search-catalog-detail-panel";
+type CatalogDatasetDetailPanelProps = {
+  item: Record<string, any>;
+  onAddSource?: (item: Record<string, any>) => void;
+};
 
-  const header = document.createElement("div");
-  header.className = "search-catalog-detail-header";
+export const CatalogDatasetDetailPanel = ({ item, onAddSource }: CatalogDatasetDetailPanelProps) => {
+  const [added, setAdded] = useState(false);
+  const meta = [
+    ["Type", item.type || "Dataset"],
+    ["Portal", item.portalType || "Catalog"],
+    ["Owner", item.owner || "Unknown"],
+    ["Identifier", item.id || "Unknown"],
+    item.url ? ["URL", item.url] : null
+  ].filter(Boolean) as [string, string][];
 
-  const titleWrap = document.createElement("div");
-  const kicker = document.createElement("span");
-  kicker.className = "search-catalog-detail-kicker";
-  kicker.textContent = item.catalogName || "Catalog dataset";
-  const title = document.createElement("h2");
-  title.className = "search-catalog-detail-title";
-  title.textContent = item.title || "Untitled dataset";
-  titleWrap.append(kicker, title);
-
-  const actions = document.createElement("div");
-  actions.className = "search-catalog-detail-actions";
-
-  if (item.url) {
-    const openLink = document.createElement("a");
-    openLink.className = "search-catalog-detail-link";
-    openLink.href = item.url;
-    openLink.target = "_blank";
-    openLink.rel = "noopener noreferrer";
-    openLink.textContent = "Open source";
-    actions.appendChild(openLink);
-  }
-
-  const addBtn = document.createElement("button");
-  addBtn.className = "search-catalog-detail-add";
-  addBtn.type = "button";
-  addBtn.textContent = "Add source";
-  addBtn.addEventListener("click", () => {
-    onAddSource?.(item);
-    addBtn.textContent = "Added";
-    addBtn.disabled = true;
-  });
-  actions.appendChild(addBtn);
-
-  header.append(titleWrap, actions);
-
-  const meta = document.createElement("dl");
-  meta.className = "search-catalog-detail-meta";
-  appendSearchCatalogMeta(meta, "Type", item.type || "Dataset");
-  appendSearchCatalogMeta(meta, "Portal", item.portalType || "Catalog");
-  appendSearchCatalogMeta(meta, "Owner", item.owner || "Unknown");
-  appendSearchCatalogMeta(meta, "Identifier", item.id || "Unknown");
-  if (item.url) appendSearchCatalogMeta(meta, "URL", item.url);
-
-  const description = document.createElement("section");
-  description.className = "search-catalog-detail-section";
-  const descriptionTitle = document.createElement("h3");
-  descriptionTitle.textContent = "Description";
-  const descriptionText = document.createElement("p");
-  descriptionText.textContent = item.snippet || "No description was provided by the catalog.";
-  description.append(descriptionTitle, descriptionText);
-
-  panel.append(header, meta, description);
-  return panel;
-}
-
-function appendSearchCatalogMeta(list, label, value) {
-  const term = document.createElement("dt");
-  term.textContent = label;
-  const desc = document.createElement("dd");
-  desc.textContent = value;
-  list.append(term, desc);
-}
+  return (
+    <Fragment>
+      <div className="search-catalog-detail-header">
+        <div>
+          <span className="search-catalog-detail-kicker">{item.catalogName || "Catalog dataset"}</span>
+          <h2 className="search-catalog-detail-title">{item.title || "Untitled dataset"}</h2>
+        </div>
+        <div className="search-catalog-detail-actions">
+          {item.url && (
+            <a className="search-catalog-detail-link" href={item.url} rel="noopener noreferrer" target="_blank">
+              Open source
+            </a>
+          )}
+          <button
+            className="search-catalog-detail-add"
+            disabled={added}
+            type="button"
+            onClick={() => {
+              onAddSource?.(item);
+              setAdded(true);
+            }}
+          >
+            {added ? "Added" : "Add source"}
+          </button>
+        </div>
+      </div>
+      <dl className="search-catalog-detail-meta">
+        {meta.map(([label, value]) => (
+          <Fragment key={label}>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </Fragment>
+        ))}
+      </dl>
+      <section className="search-catalog-detail-section">
+        <h3>Description</h3>
+        <p>{item.snippet || "No description was provided by the catalog."}</p>
+      </section>
+    </Fragment>
+  );
+};
 
 function normalizeCatalogs(value) {
   return Array.isArray(value) ? value.map((catalog) => ({

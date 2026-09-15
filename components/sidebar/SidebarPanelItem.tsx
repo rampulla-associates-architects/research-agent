@@ -19,6 +19,7 @@ import styles from "./Sidebar.module.css";
 type SidebarPanelItemProps = {
   active: boolean;
   featureId: FeatureName;
+  onOpenAddressOnMap?: (address: unknown) => void;
   onOpenPage?: (id: string, label: string, value: unknown, options?: unknown) => void;
   onInvalidateWorkspaceData?: (featureId: FeatureName, scopes: WorkspaceInvalidationScope | WorkspaceInvalidationScope[]) => void;
   onSelectAgentSession?: (session: { id: string }) => void;
@@ -61,7 +62,7 @@ const getDataByFeature: Record<string, () => Promise<Response>> = {
   tool: getToolData
 };
 
-export const SidebarPanelItem = ({ active, featureId, onOpenPage, onInvalidateWorkspaceData, onSelectAgentSession, workspaceInvalidation = {} }: SidebarPanelItemProps) => {
+export const SidebarPanelItem = ({ active, featureId, onOpenAddressOnMap, onOpenPage, onInvalidateWorkspaceData, onSelectAgentSession, workspaceInvalidation = {} }: SidebarPanelItemProps) => {
   const featureLabel = getFeatureLabel(featureId);
   const featureInvalidation = getWorkspaceFeatureInvalidation(workspaceInvalidation, featureId);
   const [searchSources, setSearchSources] = useState<SourceWidgetOption[]>([]);
@@ -123,6 +124,8 @@ export const SidebarPanelItem = ({ active, featureId, onOpenPage, onInvalidateWo
       openLabel: `Open ${item.name ?? item.id}`,
       onOpen: featureId === "agent"
         ? () => onSelectAgentSession?.({ id: item.id })
+        : featureId === "address"
+          ? () => onOpenAddressOnMap?.(item)
         : () => onOpenPage?.(`${featureId}-${item.id || index}`, item.name ?? item.id, item, {
         featureId,
         onSave: async (nextItem: unknown) => {
@@ -135,9 +138,9 @@ export const SidebarPanelItem = ({ active, featureId, onOpenPage, onInvalidateWo
         target: "item"
       })
     }));
-  }, [featureId, featureItems, onInvalidateWorkspaceData, onOpenPage, onSelectAgentSession]);
+  }, [featureId, featureItems, onInvalidateWorkspaceData, onOpenAddressOnMap, onOpenPage, onSelectAgentSession]);
 
-  function handleFeatureDoubleClick() {
+  function handleFeatureOpen() {
     const getData = getDataByFeature[featureId];
     getData?.()
       .then((response) => (response.ok ? response.json() : { error: `Could not load ${featureLabel} data.`, status: response.status }))
@@ -175,13 +178,14 @@ export const SidebarPanelItem = ({ active, featureId, onOpenPage, onInvalidateWo
       hidden={!active}
     >
       <div className={styles.panelItemHeader}>
-        <h2
+        <button
+          type="button"
           className={styles.panelItemTitle}
-          onDoubleClick={handleFeatureDoubleClick}
-          title={`Edit ${featureLabel}`}
+          onClick={handleFeatureOpen}
+          title={`List ${featureLabel} items`}
         >
           {featureLabel}
-        </h2>
+        </button>
         <SourceWidget
           options={sourceOptions}
           selectedId={selectedSourceValue}

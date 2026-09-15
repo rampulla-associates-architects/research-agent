@@ -31,6 +31,8 @@ export function Application() {
 
   const openFileRef = useRef<((entry: unknown) => void) | null>(null);
   const onOpenFile = useCallback((entry: unknown) => openFileRef.current?.(entry), []);
+  const openAddressOnMapRef = useRef<((address: unknown) => void) | null>(null);
+  const onOpenAddressOnMap = useCallback((address: unknown) => openAddressOnMapRef.current?.(address), []);
 
   const openPageRef = useRef<((id: string, label: string, value: unknown, options?: unknown) => void) | null>(null);
   const onOpenPage = useCallback((id: string, label: string, value: unknown, options?: unknown) => {
@@ -69,6 +71,7 @@ export function Application() {
             onOpenFile={onOpenFile}
             onOpenPage={onOpenPage}
             onOpenSettings={onOpenSettings}
+            onOpenAddressOnMap={onOpenAddressOnMap}
             onInvalidateWorkspaceData={invalidateWorkspaceData}
             onSelectAgentSession={setSelectedAgentSession}
             workspaceInvalidation={workspaceInvalidation}
@@ -77,6 +80,7 @@ export function Application() {
         <Separator className="workbench-resize-handle" />
         <Panel id="editor" minSize="20">
           <EditorArea
+            openAddressOnMapRef={openAddressOnMapRef}
             openFileRef={openFileRef}
             openPageRef={openPageRef}
             suggestToolRef={suggestToolRef}

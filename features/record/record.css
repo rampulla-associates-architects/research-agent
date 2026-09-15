@@ -6,9 +6,9 @@
 
 .record-card {
   position: relative;
-  border: 1px solid #d6d9de;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--color-surface);
   overflow: visible;
   min-width: 0;
 }
@@ -27,12 +27,12 @@
 }
 
 .record-summary strong {
-  color: #1f2933;
+  color: var(--color-text);
   font-size: 13px;
 }
 
 .record-summary span {
-  color: #526070;
+  color: var(--color-text-muted);
   font-size: 12px;
 }
 
@@ -40,7 +40,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  border-top: 1px solid #e5e8ec;
+  border-top: 1px solid var(--color-border-muted);
   margin: 2px -10px -10px;
   padding: 8px 10px;
   background: #fbfcfd;
@@ -51,7 +51,7 @@
 }
 
 .record-body {
-  border-top: 1px solid #e5e8ec;
+  border-top: 1px solid var(--color-border-muted);
   padding: 10px;
   min-width: 0;
 }
@@ -74,9 +74,9 @@
   flex: 0 0 auto;
   width: 30px;
   height: 30px;
-  border: 1px solid #d6d9de;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--color-surface);
   cursor: pointer;
 }
 
@@ -112,7 +112,7 @@
 }
 
 .json-geo-action:hover {
-  background: #f7f8fa;
+  background: var(--color-surface-alt);
 }
 
 .json-tree {
@@ -159,7 +159,7 @@
   gap: 6px;
   list-style: revert;
   cursor: default;
-  color: #1f2933;
+  color: var(--color-text);
   font-weight: 700;
   line-height: 1.45;
 }
@@ -178,7 +178,7 @@
   align-items: center;
   gap: 6px;
   line-height: 1.45;
-  color: #526070;
+  color: var(--color-text-muted);
 }
 
 .json-label {
@@ -204,12 +204,12 @@
 }
 
 .json-node > summary .json-value {
-  color: #1f2933;
+  color: var(--color-text);
   font-weight: 700;
 }
 
 .json-key {
-  color: #526070;
+  color: var(--color-text-muted);
   cursor: default;
 }
 
@@ -233,7 +233,7 @@
 }
 
 .html-text-value {
-  color: #526070;
+  color: var(--color-text-muted);
 }
 
 .json-file-action,
@@ -242,9 +242,9 @@
   flex: 0 0 auto;
   width: 24px;
   height: 24px;
-  border: 1px solid #d6d9de;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--color-surface);
   cursor: pointer;
 }
 
@@ -280,7 +280,7 @@
   content: "";
   position: absolute;
   inset: 3px;
-  background: #1f2933;
+  background: var(--color-primary-bg);
   mask: center / contain no-repeat var(--asset-graph);
   -webkit-mask: center / contain no-repeat var(--asset-graph);
 }
@@ -291,18 +291,18 @@
 
 .json-file-action.is-active,
 .json-graph-action.is-active {
-  background: #1f2933;
-  border-color: #1f2933;
+  background: var(--color-primary-bg);
+  border-color: var(--color-text);
 }
 
 .json-file-action.is-active::before,
 .json-graph-action.is-active::before {
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .json-file-action:hover:not(.is-active),
 .json-graph-action:hover:not(.is-active) {
-  background: #f7f8fa;
+  background: var(--color-surface-alt);
 }
 
 .editor-record-graph-panel,
@@ -313,7 +313,7 @@
 }
 
 .record-graph-panel .react-flow__node {
-  box-shadow: 0 2px 8px rgba(31, 41, 51, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 .record-graph-header {
@@ -330,7 +330,7 @@
 .record-graph-summary strong {
   display: block;
   margin-bottom: 4px;
-  color: #1f2933;
+  color: var(--color-text);
   font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -339,7 +339,7 @@
 
 .record-graph-summary span {
   display: block;
-  color: #526070;
+  color: var(--color-text-muted);
   font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -367,7 +367,7 @@
 .record-graph-json {
   margin: 9px 0 0;
   overflow: visible;
-  border-top: 1px solid #e5e8ec;
+  border-top: 1px solid var(--color-border-muted);
   padding-top: 8px;
   cursor: default;
 }
@@ -392,9 +392,9 @@
   position: relative;
   width: 24px;
   height: 24px;
-  border: 1px solid #d6d9de;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--color-surface);
   cursor: pointer;
 }
 
@@ -402,25 +402,25 @@
   content: "";
   position: absolute;
   inset: 3px;
-  background: #1f2933;
+  background: var(--color-primary-bg);
   mask: center / contain no-repeat var(--asset-wrap);
   -webkit-mask: center / contain no-repeat var(--asset-wrap);
 }
 
 .record-graph-wrap-button.is-active {
-  background: #1f2933;
-  border-color: #1f2933;
+  background: var(--color-primary-bg);
+  border-color: var(--color-text);
 }
 
 .record-graph-wrap-button.is-active::before {
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .record-graph-handle {
   width: 9px;
   height: 9px;
-  border: 1.5px solid #2f6fed;
-  background: #ffffff;
+  border: 1.5px solid var(--color-accent);
+  background: var(--color-surface);
 }
 
 .record-graph-panel .react-flow__node.selected {
@@ -432,9 +432,9 @@
   flex: 0 0 auto;
   width: 24px;
   height: 24px;
-  border: 1px solid #d6d9de;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--color-surface);
   cursor: pointer;
 }
 
@@ -442,22 +442,22 @@
   content: "";
   position: absolute;
   inset: 3px;
-  background: #1f2933;
+  background: var(--color-primary-bg);
   mask: center / contain no-repeat var(--asset-table);
   -webkit-mask: center / contain no-repeat var(--asset-table);
 }
 
 .json-table-action.is-active {
-  background: #1f2933;
-  border-color: #1f2933;
+  background: var(--color-primary-bg);
+  border-color: var(--color-text);
 }
 
 .json-table-action.is-active::before {
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .json-table-action:hover:not(.is-active) {
-  background: #f7f8fa;
+  background: var(--color-surface-alt);
 }
 
 .json-copy-status {
@@ -473,9 +473,9 @@
 }
 
 .json-copy-status.is-success {
-  color: #137333;
+  color: var(--color-success-strong);
 }
 
 .json-copy-status.is-error {
-  color: #b3261e;
+  color: var(--color-danger);
 }

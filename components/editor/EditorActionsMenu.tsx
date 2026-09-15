@@ -1,17 +1,14 @@
 import type { ReactNode } from "react";
-import { DomSlot } from "./DomSlot";
 
 interface EditorActionsMenuProps {
   left?: ReactNode;
-  leftNodes?: Node[];
   onViewClick?: () => void;
   right?: ReactNode;
-  rightNodes?: Node[];
   viewIconSrc?: string;
   viewLabel?: string;
 }
 
-export const EditorActionsMenu = ({ left, leftNodes = [], onViewClick, right, rightNodes = [], viewIconSrc, viewLabel }: EditorActionsMenuProps) => {
+export const EditorActionsMenu = ({ left, onViewClick, right, viewIconSrc, viewLabel }: EditorActionsMenuProps) => {
   return (
     <div className="editor-actions-menu">
       <div className="editor-actions-menu-actions">
@@ -26,11 +23,9 @@ export const EditorActionsMenu = ({ left, leftNodes = [], onViewClick, right, ri
           </span>
         )}
         {left}
-        {leftNodes.length > 0 && <DomSlot nodes={leftNodes} />}
       </div>
       <div className="editor-actions-menu-actions editor-actions-menu-actions-right">
         {right}
-        {rightNodes.length > 0 && <DomSlot nodes={rightNodes} />}
       </div>
     </div>
   );

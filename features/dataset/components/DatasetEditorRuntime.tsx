@@ -1,4 +1,5 @@
 import { queryUrl } from "@/features/map/components/providers/geojson";
+import { Fragment } from "react";
 import { createRoot } from "react-dom/client";
 import { getAddressSearchSources } from "@/features/address/address.api";
 import { getDatasetData, getDatasetSearchSources, saveDatasetData } from "../dataset.api";
@@ -27,14 +28,16 @@ export function createDatasetController(builtinController, editorTabController, 
   const editorPanel = document.createElement("div");
   editorPanel.className = "editor-sources-panel";
 
-  const addDatasetSourceButton = document.createElement("button");
-  addDatasetSourceButton.className = "section-tool-button add-source-button";
-  addDatasetSourceButton.type = "button";
-  addDatasetSourceButton.setAttribute("aria-label", "Add source");
-  addDatasetSourceButton.title = "Add source";
-
   const pageMenu = document.createElement("div");
-  createRoot(pageMenu).render(<EditorActionsMenu leftNodes={[addDatasetSourceButton]} />);
+  createRoot(pageMenu).render(
+    <EditorActionsMenu
+      left={(
+        <Fragment>
+          <button className="section-tool-button add-source-button" type="button" aria-label="Add source" title="Add source" onClick={addDatasetSource} />
+        </Fragment>
+      )}
+    />
+  );
   editorPanel.append(pageMenu, sourceList);
 
   let datasetSources = [];
@@ -48,7 +51,6 @@ export function createDatasetController(builtinController, editorTabController, 
 
   loadDatasetSources();
   loadSupportedInputParams();
-  addDatasetSourceButton.addEventListener("click", addDatasetSource);
   const openDatasetEditor = () => editorTabController.openDatasetTab(editorPanel);
   window.addEventListener("research-agent:edit-dataset-sources", openDatasetEditor);
 

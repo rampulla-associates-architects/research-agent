@@ -117,6 +117,12 @@ async function loadRemoteStyle(styleUrl: string, attributionLinks: AttributionLi
             if (tj.attribution) src.attribution ??= tj.attribution;
             delete src.url;
             src.attribution = applyAttributionLinks(src.attribution, attributionLinks);
+            console.info("[Map App] Resolved remote style source", {
+              tileJsonUrl,
+              tiles: src.tiles.slice(0, 2),
+              minzoom: src.minzoom,
+              maxzoom: src.maxzoom
+            });
             return;
           }
         }
@@ -125,6 +131,10 @@ async function loadRemoteStyle(styleUrl: string, attributionLinks: AttributionLi
     }
     if (src.tiles) src.tiles = src.tiles.map(t => resolveUrl(t, styleUrl));
     src.attribution = applyAttributionLinks(src.attribution, attributionLinks);
+    console.info("[Map App] Remote style source fallback", {
+      tiles: src.tiles?.slice(0, 2),
+      url: src.url
+    });
   }));
 
   return style;

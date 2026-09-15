@@ -101,7 +101,6 @@ export async function handleAgentChat(request: Request) {
         appMessages,
         legacyContents,
         systemInstruction,
-        reportContent: body?.reportContent || "",
         send: (obj) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`))
       })
         .catch((error) => {
@@ -134,7 +133,7 @@ function getAgentModelProvider(providerId: string | null | undefined): AgentMode
   return AGENT_MODEL_PROVIDERS.find((provider) => provider.id === normalized) || geminiProvider;
 }
 
-async function runAgentChat({ apiKey, provider, model, appMessages, legacyContents, systemInstruction, reportContent, send }: any) {
+async function runAgentChat({ apiKey, provider, model, appMessages, legacyContents, systemInstruction, send }: any) {
   let flatCatalogs: any[] = [];
   let datasetSources: any[] = [];
   const toolItems = await getToolData();
@@ -154,8 +153,6 @@ async function runAgentChat({ apiKey, provider, model, appMessages, legacyConten
     ? systemInstruction.trim()
     : DEFAULT_AGENT_SYSTEM_INSTRUCTION;
   const baseInstruction = globalInstruction;
-  const currentReportContent = getReportContentFromMessages(appMessages) || reportContent || "";
-  const currentReportStatus = getReportStatusFromMessages(appMessages);
 
   const interactionTools = toInteractionTools(toolItems);
   const seenIds = new Set();
@@ -189,25 +186,6 @@ async function runAgentChat({ apiKey, provider, model, appMessages, legacyConten
         console.error("[Agent source query] Failed:", errorMessage(error));
         return { error: errorMessage(error) };
       }
-    }
-
-    if (name === "get_report") {
-      return {
-        content: currentReportContent || "",
-        status: currentReportStatus || null
-      };
-    }
-
-    if (name === "update_report") {
-      const content = String(args.content || "").trim();
-      const heading = String(args.heading || "").trim();
-      const mode = normalizeReportUpdateMode(args.mode, heading);
-      const sectionIndex = Number.isFinite(Number(args.sectionIndex)) ? Number(args.sectionIndex) : null;
-      if (!content && !heading) {
-        return { updated: false, error: "update_report requires content or a heading." };
-      }
-      send({ type: "report_update", heading: heading || null, content, mode, sectionIndex });
-      return { updated: true, mode };
     }
 
     if (name !== "search_catalog") {
@@ -297,14 +275,6 @@ async function runAgentChat({ apiKey, provider, model, appMessages, legacyConten
   }
 }
 
-function normalizeReportUpdateMode(mode: any, heading: string) {
-  const value = String(mode || "").trim().toLowerCase().replace(/[-\s]+/g, "_");
-  if (value === "append" || value === "append_to_section" || value === "replace_section") {
-    return value;
-  }
-  return heading ? "replace_section" : "append";
-}
-
 function contentHistoryToInteractionInput(contents: any[]) {
   const turns = (contents || []).map((turn) => {
     const role = turn.role === "model" ? "Assistant" : "User";
@@ -359,16 +329,8 @@ function serializeMessageContext(context: any = {}) {
     parts.push(`<context>\n${attachmentText.join("\n\n---\n\n")}\n</context>`);
   }
 
-  if (context.reportStatus) {
-    parts.push(`<report_status>\n${JSON.stringify(context.reportStatus, null, 2)}\n</report_status>`);
-  }
-
   if (context.workspaceStatus) {
     parts.push(`<workspace_status>\n${JSON.stringify(context.workspaceStatus, null, 2)}\n</workspace_status>`);
-  }
-
-  if (typeof context.report === "string" && context.report.trim()) {
-    parts.push(`<current_report_text>\n${context.report.trim()}\n</current_report_text>`);
   }
 
   return parts.join("\n\n");
@@ -391,22 +353,6 @@ function normalizeAppMessages(messages: any) {
         || (Array.isArray(message.context.toolHints) && message.context.toolHints.length > 0)
         || Boolean(message.context.workspaceStatus))
     );
-}
-
-function getReportContentFromMessages(messages: any[]) {
-  for (let i = messages.length - 1; i >= 0; i -= 1) {
-    const report = messages[i]?.context?.report;
-    if (typeof report === "string") return report;
-  }
-  return null;
-}
-
-function getReportStatusFromMessages(messages: any[]) {
-  for (let i = messages.length - 1; i >= 0; i -= 1) {
-    const status = messages[i]?.context?.reportStatus;
-    if (status && typeof status === "object") return status;
-  }
-  return null;
 }
 
 function getInteractionOutputText(interaction: any) {

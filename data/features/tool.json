@@ -49,38 +49,5 @@
         "required": false
       }
     ]
-  },
-  {
-    "id": "2c8cd869-00eb-4473-98c5-6c1fc1f900ce",
-    "name": "get_report",
-    "description": "Get the current content of the research report for the active property.",
-    "params": []
-  },
-  {
-    "id": "140bea3a-b3e0-4471-93d2-ba49158e8dbd",
-    "name": "update_report",
-    "description": "Create, append to, or replace a section of the research report. Use this for property data, zoning info, ownership details, and key findings. Prefer replacing or appending to an existing section when report_status shows a matching heading. Use append only when adding genuinely new material. You must call this tool before telling the user that you added, saved, wrote, or updated report content. Keep chat conversational — save structure for the report.",
-    "params": [
-      {
-        "name": "content",
-        "type": "string",
-        "required": false
-      },
-      {
-        "name": "heading",
-        "type": "string",
-        "required": false
-      },
-      {
-        "name": "mode",
-        "type": "string",
-        "required": false
-      },
-      {
-        "name": "sectionIndex",
-        "type": "number",
-        "required": false
-      }
-    ]
   }
 ]

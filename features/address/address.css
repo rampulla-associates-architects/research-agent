@@ -1,17 +1,17 @@
 .search-sources-editor-panel {
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .search-sources-save-status {
   font-size: 12px;
-  color: #526070;
+  color: var(--color-text-muted);
   opacity: 0;
   transition: opacity 0.2s;
 }
 
 .search-sources-save-status.is-saved {
   opacity: 1;
-  color: #2a9a5e;
+  color: var(--color-success);
 }
 
 .search-sources-list {
@@ -34,12 +34,12 @@
 .search-source-row-select {
   flex: 0 0 auto;
   padding: 4px 6px;
-  border: 1px solid #c9ced6;
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   font: inherit;
   font-size: 12px;
-  color: #1f2933;
-  background: #ffffff;
+  color: var(--color-text);
+  background: var(--color-surface);
 }
 
 .search-source-row-costly {
@@ -47,7 +47,7 @@
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  color: #526070;
+  color: var(--color-text-muted);
   white-space: nowrap;
   cursor: pointer;
 }
@@ -57,7 +57,7 @@
   align-items: center;
   gap: 6px;
   min-width: min(360px, 100%);
-  color: #526070;
+  color: var(--color-text-muted);
   font-size: 12px;
 }
 
@@ -65,13 +65,13 @@
   flex: 1 1 220px;
   min-width: 0;
   box-sizing: border-box;
-  border: 1px solid #c9ced6;
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   padding: 4px 6px;
-  color: #1f2933;
+  color: var(--color-text);
   font: inherit;
   font-size: 12px;
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .search-source-variable-footer {
